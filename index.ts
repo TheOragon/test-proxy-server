@@ -2,6 +2,7 @@ import express, { json, text } from "express";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import cors from "cors";
 import morgan from "morgan";
+const { version } = require("./package.json");
 
 
 const app = express();
@@ -13,7 +14,7 @@ app.use(morgan("dev"))
 
 
 app.get("/", (req, res) => {
-     res.status(200).send("Server Online")
+     res.status(200).send(`Proxy Live v${version}`)
 })
 
 
