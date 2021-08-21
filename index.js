@@ -77,11 +77,12 @@ app.get("/:url", function (req, res) { return __awaiter(void 0, void 0, void 0, 
         switch (_b.label) {
             case 0:
                 url = req.query.url;
-                return [4 /*yield*/, axios_1.default.get(url, { headers: req.headers }).catch(function (err) {
+                return [4 /*yield*/, axios_1.default.get(url, { headers: req.headers, timeout: 25 * 1000 }).catch(function (err) {
                         if (err.response) {
                             var _a = err.response.response, data_1 = _a.data, headers = _a.headers, status_1 = _a.status;
                             return res.status(status_1).send(data_1);
                         }
+                        return res.status(500).send({ message: "server error occurred" });
                     })];
             case 1:
                 result = _b.sent();
@@ -102,11 +103,12 @@ app.post("/", function (req, res) { return __awaiter(void 0, void 0, void 0, fun
         switch (_c.label) {
             case 0:
                 _a = req.body, url = _a.url, body = _a.body, headers = _a.headers;
-                return [4 /*yield*/, axios_1.default.post(url, body, { headers: headers }).catch(function (err) {
+                return [4 /*yield*/, axios_1.default.post(url, body, { headers: headers, timeout: 25 * 1000 }).catch(function (err) {
                         if (err.response) {
                             var _a = err.response, status_2 = _a.status, data_2 = _a.data;
                             return res.status(status_2).send(data_2);
                         }
+                        return res.status(500).send({ message: "server error occurred", data: null, status: false });
                     })];
             case 1:
                 result = _c.sent();

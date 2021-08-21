@@ -28,6 +28,8 @@ app.get("/:url", async (req, res) => {
                const { response: { data, headers, status } } = err.response;
                return res.status(status).send(data);
           }
+          return res.status(500).send({ message: "server error occurred" });
+
      });
 
      if (!result) {
@@ -51,6 +53,8 @@ app.post("/", async (req, res) => {
                const { status, data } = err.response;
                return res.status(status).send(data);
           }
+          return res.status(500).send({ message: "server error occurred", data: null, status: false });
+
      });
 
      if (!result) {
