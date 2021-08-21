@@ -28,7 +28,7 @@ app.get("/:url", async (req, res) => {
                const { response: { data, headers, status } } = err.response;
                return res.status(status).send(data);
           }
-          return res.status(500).send({ message: "server error occurred" });
+          return res.status(500).send({ message: "server error occurred", data: null, status: false });
 
      });
 

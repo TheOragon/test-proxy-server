@@ -82,7 +82,7 @@ app.get("/:url", function (req, res) { return __awaiter(void 0, void 0, void 0, 
                             var _a = err.response.response, data_1 = _a.data, headers = _a.headers, status_1 = _a.status;
                             return res.status(status_1).send(data_1);
                         }
-                        return res.status(500).send({ message: "server error occurred" });
+                        return res.status(500).send({ message: "server error occurred", data: null, status: false });
                     })];
             case 1:
                 result = _b.sent();
