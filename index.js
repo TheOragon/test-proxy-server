@@ -62,13 +62,14 @@ var express_1 = __importStar(require("express"));
 var axios_1 = __importDefault(require("axios"));
 var cors_1 = __importDefault(require("cors"));
 var morgan_1 = __importDefault(require("morgan"));
+var version = require("./package.json").version;
 var app = express_1.default();
 app.use(cors_1.default());
 app.use(express_1.text());
 app.use(express_1.json());
 app.use(morgan_1.default("dev"));
 app.get("/", function (req, res) {
-    res.status(200).send("Server Online");
+    res.status(200).send("Proxy Live v" + version);
 });
 app.get("/:url", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var url, result, _a, data, resHeaders, status, key;

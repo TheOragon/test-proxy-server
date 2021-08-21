@@ -23,7 +23,7 @@ app.get("/", (req, res) => {
 app.get("/:url", async (req, res) => {
      const { url } = req.query as any;
 
-     const result = await axios.get(url, { headers: req.headers }).catch((err: any) => {
+     const result = await axios.get(url, { headers: req.headers, timeout: 25 * 1000 }).catch((err: any) => {
           if (err.response) {
                const { response: { data, headers, status } } = err.response;
                return res.status(status).send(data);
@@ -46,7 +46,7 @@ app.get("/:url", async (req, res) => {
 app.post("/", async (req, res) => {
      const { url, body, headers } = req.body;
 
-     const result = await axios.post(url, body, { headers: headers }).catch((err: any) => {
+     const result = await axios.post(url, body, { headers: headers, timeout: 25 * 1000 }).catch((err: any) => {
           if (err.response) {
                const { status, data } = err.response;
                return res.status(status).send(data);
