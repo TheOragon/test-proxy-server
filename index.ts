@@ -1,7 +1,8 @@
-import express, { json, text } from "express";
-import axios, { AxiosError, AxiosResponse } from "axios";
-import cors from "cors";
-import morgan from "morgan";
+import axios, { AxiosResponse } from 'axios';
+import cors from 'cors';
+import express, { json, text } from 'express';
+import morgan from 'morgan';
+
 const { version } = require("./package.json");
 
 
@@ -14,41 +15,21 @@ app.use(morgan("dev"))
 
 
 app.get("/", (req, res) => {
+     // const net = os.networkInterfaces();
+     // console.log(net)
+     // res.send(net);
      res.status(200).send(`Proxy Live v${version}`)
 })
 
 
 
+app.all("/go", async (req, res) => {
+     const { url, body, headers, method = "GET" } = req.body;
 
-app.get("/:url", async (req, res) => {
-     const { url } = req.query as any;
-
-     const result = await axios.get(url, { headers: req.headers, timeout: 25 * 1000 }).catch((err: any) => {
-          if (err.response) {
-               const { response: { data, headers, status } } = err.response;
-               return res.status(status).send(data);
-          }
-          return res.status(500).send({ message: "server error occurred", data: null, status: false });
-
-     });
-
-     if (!result) {
-          return;
-     }
-     const { data, headers: resHeaders, status }: AxiosResponse = result as any;
-
-     for (let key in resHeaders) {
-          res.setHeader(key, resHeaders[key]);
-     }
-
-     return res.status(status).send(data);
-
-})
-
-app.post("/", async (req, res) => {
-     const { url, body, headers } = req.body;
-
-     const result = await axios.post(url, body, { headers: headers, timeout: 25 * 1000 }).catch((err: any) => {
+     const result = await axios({
+          method: method,
+          url, data: body, headers: headers, timeout: 25 * 1000
+     }).catch((err: any) => {
           if (err.response) {
                const { status, data } = err.response;
                return res.status(status).send(data);
