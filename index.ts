@@ -21,7 +21,16 @@ app.get("/", (req, res) => {
      res.status(200).send(`Proxy Live v${version}`)
 })
 
+app.all("/test", async (req, res) => {
 
+     const alert = req.body;
+
+     console.info(JSON.stringify(alert))
+     console.info(alert);
+
+     res.status(200).send("Success");
+
+});
 
 app.all("/go", async (req, res) => {
      const { url, body, headers, method = "GET" } = req.body;
