@@ -3,6 +3,11 @@ import cors from 'cors';
 import express, { json, text } from 'express';
 import morgan from 'morgan';
 
+import Mail from './mailer';
+
+
+
+
 const { version } = require("./package.json");
 
 
@@ -15,18 +20,19 @@ app.use(morgan("dev"))
 
 
 app.get("/", (req, res) => {
-     // const net = os.networkInterfaces();
-     // console.log(net)
-     // res.send(net);
+
      res.status(200).send(`Proxy Live v${version}`)
 })
 
 app.all("/test", async (req, res) => {
 
-     const alert = req.body;
+     const alert = req.body; 
+
+     const email = "samuleagina20@gmail.com";
 
      console.info(JSON.stringify(alert))
      console.info(alert);
+     await new Mail([email, "motet_tanners0o@icloud.com", "odogwuconfidence1@gmail.com"], 'Testing Bot', `${alert}`);
 
      res.status(200).send("Success");
 

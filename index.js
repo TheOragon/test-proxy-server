@@ -58,64 +58,55 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = __importStar(require("express"));
 var axios_1 = __importDefault(require("axios"));
 var cors_1 = __importDefault(require("cors"));
+var express_1 = __importStar(require("express"));
 var morgan_1 = __importDefault(require("morgan"));
 var version = require("./package.json").version;
-var app = express_1.default();
-app.use(cors_1.default());
-app.use(express_1.text());
-app.use(express_1.json());
-app.use(morgan_1.default("dev"));
+var app = (0, express_1.default)();
+app.use((0, cors_1.default)());
+app.use((0, express_1.text)());
+app.use((0, express_1.json)());
+app.use((0, morgan_1.default)("dev"));
 app.get("/", function (req, res) {
-    res.status(200).send("Proxy Live v" + version);
+    // const net = os.networkInterfaces();
+    // console.log(net)
+    // res.send(net);
+    res.status(200).send("Proxy Live v".concat(version));
 });
-app.get("/:url", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var url, result, _a, data, resHeaders, status, key;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+app.all("/test", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var alert;
+    return __generator(this, function (_a) {
+        alert = req.body;
+        console.info(JSON.stringify(alert));
+        console.info(alert);
+        res.status(200).send("Success");
+        return [2 /*return*/];
+    });
+}); });
+app.all("/go", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, url, body, headers, _b, method, result, _c, data, resHeaders, status, key;
+    return __generator(this, function (_d) {
+        switch (_d.label) {
             case 0:
-                url = req.query.url;
-                return [4 /*yield*/, axios_1.default.get(url, { headers: req.headers, timeout: 25 * 1000 }).catch(function (err) {
+                _a = req.body, url = _a.url, body = _a.body, headers = _a.headers, _b = _a.method, method = _b === void 0 ? "GET" : _b;
+                return [4 /*yield*/, (0, axios_1.default)({
+                        method: method,
+                        url: url,
+                        data: body, headers: headers, timeout: 25 * 1000
+                    }).catch(function (err) {
                         if (err.response) {
-                            var _a = err.response.response, data_1 = _a.data, headers = _a.headers, status_1 = _a.status;
+                            var _a = err.response, status_1 = _a.status, data_1 = _a.data;
                             return res.status(status_1).send(data_1);
                         }
                         return res.status(500).send({ message: "server error occurred", data: null, status: false });
                     })];
             case 1:
-                result = _b.sent();
+                result = _d.sent();
                 if (!result) {
                     return [2 /*return*/];
                 }
-                _a = result, data = _a.data, resHeaders = _a.headers, status = _a.status;
-                for (key in resHeaders) {
-                    res.setHeader(key, resHeaders[key]);
-                }
-                return [2 /*return*/, res.status(status).send(data)];
-        }
-    });
-}); });
-app.post("/", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, url, body, headers, result, _b, data, resHeaders, status, key;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
-            case 0:
-                _a = req.body, url = _a.url, body = _a.body, headers = _a.headers;
-                return [4 /*yield*/, axios_1.default.post(url, body, { headers: headers, timeout: 25 * 1000 }).catch(function (err) {
-                        if (err.response) {
-                            var _a = err.response, status_2 = _a.status, data_2 = _a.data;
-                            return res.status(status_2).send(data_2);
-                        }
-                        return res.status(500).send({ message: "server error occurred", data: null, status: false });
-                    })];
-            case 1:
-                result = _c.sent();
-                if (!result) {
-                    return [2 /*return*/];
-                }
-                _b = result, data = _b.data, resHeaders = _b.headers, status = _b.status;
+                _c = result, data = _c.data, resHeaders = _c.headers, status = _c.status;
                 for (key in resHeaders) {
                     res.setHeader(key, resHeaders[key]);
                 }
@@ -125,7 +116,7 @@ app.post("/", function (req, res) { return __awaiter(void 0, void 0, void 0, fun
 }); });
 var PORT = Number(process.env.PORT || '') || 8080;
 var server = app.listen(PORT, function () {
-    console.log("Server Running on http://localhost:" + PORT);
+    console.log("Server Running on http://localhost:".concat(PORT));
 });
 // process.on("SIGKILL", () => {
 //      console.log("Shutting down server");
