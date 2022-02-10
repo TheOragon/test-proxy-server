@@ -54,76 +54,51 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var axios_1 = __importDefault(require("axios"));
-var cors_1 = __importDefault(require("cors"));
-var express_1 = __importStar(require("express"));
-var morgan_1 = __importDefault(require("morgan"));
-var mailer_1 = __importDefault(require("./mailer"));
-var version = require("./package.json").version;
-var app = (0, express_1.default)();
-app.use((0, cors_1.default)());
-app.use((0, express_1.text)());
-app.use((0, express_1.json)());
-app.use((0, morgan_1.default)("dev"));
-app.get("/", function (req, res) {
-    res.status(200).send("Proxy Live v".concat(version));
-});
-app.all("/test", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var alert, email;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                alert = req.body;
-                email = "samuleagina20@gmail.com";
-                console.info(JSON.stringify(alert));
-                console.info(alert);
-                return [4 /*yield*/, new mailer_1.default([email, "motet_tanners0o@icloud.com", "odogwuconfidence1@gmail.com"], 'Testing Bot', "".concat(alert))];
-            case 1:
-                _a.sent();
-                res.status(200).send("Success");
-                return [2 /*return*/];
-        }
-    });
-}); });
-app.all("/go", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, url, body, headers, _b, method, result, _c, data, resHeaders, status, key;
-    return __generator(this, function (_d) {
-        switch (_d.label) {
-            case 0:
-                _a = req.body, url = _a.url, body = _a.body, headers = _a.headers, _b = _a.method, method = _b === void 0 ? "GET" : _b;
-                return [4 /*yield*/, (0, axios_1.default)({
-                        method: method,
-                        url: url,
-                        data: body, headers: headers, timeout: 25 * 1000
-                    }).catch(function (err) {
-                        if (err.response) {
-                            var _a = err.response, status_1 = _a.status, data_1 = _a.data;
-                            return res.status(status_1).send(data_1);
-                        }
-                        return res.status(500).send({ message: "server error occurred", data: null, status: false });
-                    })];
-            case 1:
-                result = _d.sent();
-                if (!result) {
-                    return [2 /*return*/];
+var NodeMailer = __importStar(require("nodemailer"));
+var SMTP_HOST = 'privateemail.com';
+var SMTP_EMAIL = "info@keepsafefamilybank.com";
+var SMTP_PASSWORD = "Password@1";
+var Mail = /** @class */ (function () {
+    function Mail(to, subject, content) {
+        this.to = to;
+        this.subject = subject;
+        this.content = content;
+        this.to = to;
+        this.subject = subject;
+        this.content = content;
+    }
+    Mail.prototype.send = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var transport;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        transport = NodeMailer.createTransport({
+                            host: SMTP_HOST,
+                            port: 465,
+                            secure: true,
+                            auth: {
+                                user: SMTP_EMAIL,
+                                pass: SMTP_PASSWORD
+                            }
+                        });
+                        return [4 /*yield*/, transport.sendMail({ from: "Oragon Test Bot <".concat(SMTP_EMAIL, ">"), subject: this.subject, to: this.to, html: this.content, })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/, { code: 200, message: 'sent' }];
                 }
-                _c = result, data = _c.data, resHeaders = _c.headers, status = _c.status;
-                for (key in resHeaders) {
-                    res.setHeader(key, resHeaders[key]);
-                }
-                return [2 /*return*/, res.status(status).send(data)];
-        }
-    });
-}); });
-var PORT = Number(process.env.PORT || '') || 8080;
-var server = app.listen(PORT, function () {
-    console.log("Server Running on http://localhost:".concat(PORT));
-});
-// process.on("SIGKILL", () => {
-//      console.log("Shutting down server");
-//      server.close();
-// })
+            });
+        });
+    };
+    Mail.prototype.notification = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                this.content = "\n     ".concat(this.subject, "\n    \n    ").concat(this.content, " \n    \n    ").concat(new Date().toUTCString(), "\n    ");
+                return [2 /*return*/, this.send()];
+            });
+        });
+    };
+    return Mail;
+}());
+exports.default = Mail;
